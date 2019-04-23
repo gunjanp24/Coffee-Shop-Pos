@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CoffeeShop
@@ -26,14 +19,20 @@ namespace CoffeeShop
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ViewProduct frm = new ViewProduct();
-            frm.Show();
+            if(sqlconnector.productsDataTable != null && sqlconnector.productTypes != null)
+            {
+                ViewProduct frm = new ViewProduct();
+                frm.Show();
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            ShopPOS frm = new ShopPOS();
-            frm.Show();
+            if (sqlconnector.productsDataTable != null && sqlconnector.productTypes != null)
+            {
+                ShopPOS frm = new ShopPOS();
+                frm.Show();
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)

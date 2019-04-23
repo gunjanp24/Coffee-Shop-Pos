@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CoffeeShop
@@ -13,8 +10,9 @@ namespace CoffeeShop
     public partial class ShopPOS : Form
     {
         private BindingList<Models.Product> products = new BindingList<Models.Product>();
-        private DataTable dt = sqlconnector.GetProducts();
-        private List<Models.ProductType> types = sqlconnector.GetProductypes();
+        private DataTable dt = sqlconnector.productsDataTable;
+        private List<Models.ProductType> types = sqlconnector.productTypes;
+
         private decimal transTotal = 0.00M;
 
         public ShopPOS()
@@ -54,12 +52,18 @@ namespace CoffeeShop
                     //Models.Product product
                     Button b = new Button
                     {
-                        Height = 120,
-                        Width = 120,
+                        Height = 155,
+                        Width = 157,
                         Text = foundRows[i]["Description"].ToString(),
                         Tag = foundRows[i],
+                        TextAlign = ContentAlignment.BottomCenter
+                };
 
-                    };
+                    Byte[] imagedata = new byte[0];
+                    imagedata = (Byte[])(foundRows[i]["Image"]);
+                    System.IO.MemoryStream mem = new System.IO.MemoryStream(imagedata);
+                    b.Image = (Image.FromStream(mem)).GetThumbnailImage(120,100, ()=> false, IntPtr.Zero);
+                    b.ImageAlign = ContentAlignment.TopCenter;
                     b.Click += new EventHandler(UpdateProductList);
                     flp.Controls.Add(b);
 
@@ -164,5 +168,6 @@ namespace CoffeeShop
 
 
         }
+        
     }
 }
