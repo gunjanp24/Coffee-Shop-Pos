@@ -6,5 +6,7 @@ namespace CoffeeShop.Models
     {
         public string TransactionID { get; set; }
         public DateTime TransactionDate { get; set; }
+        public double TAX { get; set; }
+        public double SALES { get; set; }
     }
 }

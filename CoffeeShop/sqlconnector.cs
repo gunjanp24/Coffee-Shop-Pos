@@ -37,6 +37,45 @@ namespace CoffeeShop
             productTypes = plist;
         }
 
+        public static void GetSalesAndTaxTotals(out double sales, out double tax)
+        {
+            sales = 0; tax = 0;
+            using (SqlConnection connection = new SqlConnection(sqlconnectstring))
+            {
+                connection.Open();
+                string query = "SELECT SUM(Sales) FROM tblTransactions ";
+                SqlCommand com = new SqlCommand(query, connection);
+
+                string query2 = "SELECT SUM(Tax) FROM tblTransactions";
+                SqlCommand com2 = new SqlCommand(query2, connection);
+
+                var xSales = com.ExecuteScalar();
+                var yTax = com2.ExecuteScalar();
+
+                if (xSales != null && yTax != null)
+                {
+                    try
+                    {
+                        sales = Convert.ToDouble(xSales);
+                        tax = Convert.ToDouble(yTax);
+                    }
+                    catch
+                    {
+                        sales = -20;
+                        tax = -20;
+                    }
+                }
+                else
+                {
+                    sales = -10;
+                    tax = -10;
+                }
+                connection.Close();
+            }
+
+
+        }
+
         public static void GetProducts()
         {
             DataTable dt = new DataTable();
@@ -76,12 +115,14 @@ namespace CoffeeShop
         {
             using (SqlConnection connection = new SqlConnection(sqlconnectstring))
             {
-                string query = $@"INSERT INTO tblTransactions (TransactionID, TransactionDate) VALUES (@TransactionID, @TransactionDate)";
+                string query = $@"INSERT INTO tblTransactions (TransactionID, TransactionDate, Sales, Tax) VALUES (@TransactionID, @TransactionDate, @Sales, @Tax)";
                 using (SqlCommand com = new SqlCommand(query, connection))
                 {
                     connection.Open();
                     com.Parameters.AddWithValue("@TransactionID", transaction.TransactionID);
                     com.Parameters.AddWithValue("@TransactionDate", transaction.TransactionDate);
+                    com.Parameters.AddWithValue("@Sales", transaction.SALES);
+                    com.Parameters.AddWithValue("@Tax", transaction.TAX);
 
                     com.ExecuteNonQuery();
                     connection.Close();
@@ -109,7 +150,7 @@ namespace CoffeeShop
         public static List<string> ChartData()
         {
             List<string> pID = new List<string>();
-
+            
             using (SqlConnection connection = new SqlConnection(sqlconnectstring))
             {
                 string query = "SELECT dbo.tblProduct.Description FROM dbo.tblTransactionItem LEFT OUTER JOIN dbo.tblProduct ON dbo.tblTransactionItem.ProductID = dbo.tblProduct.ProductID";
@@ -128,6 +169,7 @@ namespace CoffeeShop
             }
             return pID;
         }
+
 
 #region CSTRING
         [DllImport("cstring.dll")]

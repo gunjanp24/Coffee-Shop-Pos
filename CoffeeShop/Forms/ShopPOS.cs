@@ -13,7 +13,9 @@ namespace CoffeeShop
         private DataTable dt = sqlconnector.productsDataTable;
         private List<Models.ProductType> types = sqlconnector.productTypes;
 
-        private decimal transTotal = 0.00M;
+        private double subTotalAmount = 0;
+        private double total = 0;
+        private double tax = 0;
 
         public ShopPOS()
         {
@@ -82,7 +84,7 @@ namespace CoffeeShop
             var x = ((DataRow)b.Tag)["Description"].ToString();
             p.Description = x;
             x = ((DataRow)b.Tag)["Price"].ToString();
-            p.Price = decimal.Parse(x);
+            p.Price = double.Parse(x);
             x = ((DataRow)b.Tag)["ProductID"].ToString();
             p.ProductID = int.Parse(x);
             x = ((DataRow)b.Tag)["ProductType"].ToString();
@@ -90,7 +92,7 @@ namespace CoffeeShop
 
             products.Add(p);
             listBox1.SelectedIndex = listBox1.Items.Count - 1;
-            TransTotal += p.Price;
+            SUBTOTAL += p.Price;
 
         }
 
@@ -117,29 +119,43 @@ namespace CoffeeShop
         {
             Models.Product selectedProoduct = (Models.Product)listBox1.SelectedItem;
             products.Remove(selectedProoduct);
-            TransTotal -= selectedProoduct.Price;
+            SUBTOTAL -= selectedProoduct.Price;
         }
-
-        public decimal TransTotal
+        
+        public double SUBTOTAL
         {
             get
             {
-                return transTotal;
+                return subTotalAmount;
             }
             set
             {
-                transTotal = value;
-                totalTextBox.Text = string.Format("{0:c}", transTotal);
+                subTotalAmount = value;
+                subTotal.Text = string.Format("{0:c}", subTotalAmount);
+                
+                if (subTotalAmount > 0)
+                {
+                    tax = subTotalAmount * 0.0825;
+                } else
+                {
+                    tax = 0;
+                }
+                taxBox.Text = string.Format("{0:c}", tax);
+
+                total = subTotalAmount + tax;
+                totalTextBox.Text = string.Format("{0:c}", total);
 
             }
         }
 
+        
         private void btnPay_Click(object sender, EventArgs e)
         {
             Payment payment = new Payment();
             //payment.Show();
             payment.PaymentMade += new Payment.PaymentMadeEvent(payment_PaymentMade);
-            payment.PaymentAmount = TransTotal;
+            payment.PaymentAmount = total; 
+            
             //payment.ShowDialog();
             payment.Show();
         }
@@ -154,15 +170,30 @@ namespace CoffeeShop
             {
                 trans.TransactionDate = DateTime.Now;
                 trans.TransactionID = Guid.NewGuid().ToString("N");
-                sqlconnector.SaveTransaction(trans);
+                trans.TAX = tax;
+                trans.SALES = subTotalAmount;
                 //save transaction
-                foreach (Models.Product product in products)
+                try
                 {
-                    item = new Models.TransactionItem();
+                    sqlconnector.SaveTransaction(trans);
+                    foreach (Models.Product product in products)
+                    {
+                        item = new Models.TransactionItem();
 
-                    item.TransactionID = trans.TransactionID;
-                    item.ProductID = product.ProductID;
-                    sqlconnector.SaveTransactionItem(item);
+                        item.TransactionID = trans.TransactionID;
+                        item.ProductID = product.ProductID;
+                        sqlconnector.SaveTransactionItem(item);
+                    }
+                    products.Clear();
+                    subTotalAmount = 0;
+                    totalTextBox.Text = "0";
+                    subTotal.Text = "0";
+                    taxBox.Text = "0";
+                }
+                catch
+                {
+                    MessageBox.Show("Payment not saved");
+                    return;
                 }
             }
 

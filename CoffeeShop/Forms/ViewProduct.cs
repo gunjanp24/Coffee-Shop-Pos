@@ -20,15 +20,19 @@ namespace CoffeeShop
 
         private void comboBox1_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (((Models.ProductType)comboBox1.SelectedItem).ProductTypeID < 0)
+            int id = -10;
+            id = ((Models.ProductType)comboBox1.SelectedItem).ProductTypeID;
+            if ( id < 0)
             {
-                loadGrid();
+                dt.DefaultView.RowFilter = null;//(dataGridView1.DataSource as DataTable).DefaultView.RowFilter = null;
+
             }
             else
             {
-                string filterValue = ((Models.ProductType)comboBox1.SelectedItem).ProductTypeID.ToString();
+                string filterValue = id.ToString();
                 string rowfilter = string.Format("[{0}] = '{1}'", "ProductType", filterValue);
-                (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = rowfilter;
+                dt.DefaultView.RowFilter = rowfilter;// (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = rowfilter;
+
             }
         }
 
@@ -49,7 +53,7 @@ namespace CoffeeShop
             Models.ProductType displayAll = new Models.ProductType
             {
                 Description = "Display All Products",
-                ProductTypeID = -1
+                ProductTypeID = -10
             };
 
             List<Models.ProductType> pt = new List<Models.ProductType>();

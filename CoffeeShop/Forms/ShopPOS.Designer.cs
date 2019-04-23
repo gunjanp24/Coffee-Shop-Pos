@@ -35,6 +35,10 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.btnPay = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.subTotal = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.taxBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.totalTextBox = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
@@ -53,7 +57,7 @@
             // btnDelete
             // 
             this.btnDelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnDelete.Location = new System.Drawing.Point(814, 606);
+            this.btnDelete.Location = new System.Drawing.Point(815, 574);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(147, 65);
             this.btnDelete.TabIndex = 1;
@@ -104,27 +108,67 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(607, 606);
+            this.label1.Location = new System.Drawing.Point(559, 577);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 24);
+            this.label1.Size = new System.Drawing.Size(98, 24);
             this.label1.TabIndex = 4;
-            this.label1.Text = "Total:";
+            this.label1.Text = "Sub Total:";
+            // 
+            // subTotal
+            // 
+            this.subTotal.Location = new System.Drawing.Point(663, 571);
+            this.subTotal.Name = "subTotal";
+            this.subTotal.ReadOnly = true;
+            this.subTotal.Size = new System.Drawing.Size(119, 30);
+            this.subTotal.TabIndex = 5;
+            this.subTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(559, 621);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(99, 24);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Tax: 8.25%";
+            // 
+            // taxBox
+            // 
+            this.taxBox.Location = new System.Drawing.Point(663, 615);
+            this.taxBox.Name = "taxBox";
+            this.taxBox.ReadOnly = true;
+            this.taxBox.Size = new System.Drawing.Size(119, 30);
+            this.taxBox.TabIndex = 7;
+            this.taxBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(559, 660);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(95, 24);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Total due:";
             // 
             // totalTextBox
             // 
-            this.totalTextBox.Location = new System.Drawing.Point(577, 633);
+            this.totalTextBox.Location = new System.Drawing.Point(663, 657);
             this.totalTextBox.Name = "totalTextBox";
             this.totalTextBox.ReadOnly = true;
-            this.totalTextBox.Size = new System.Drawing.Size(131, 30);
-            this.totalTextBox.TabIndex = 5;
+            this.totalTextBox.Size = new System.Drawing.Size(119, 30);
+            this.totalTextBox.TabIndex = 9;
             this.totalTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // ShopPOS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(973, 682);
+            this.ClientSize = new System.Drawing.Size(974, 714);
             this.Controls.Add(this.totalTextBox);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.taxBox);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.subTotal);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnPay);
             this.Controls.Add(this.tabControl1);
@@ -150,6 +194,10 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button btnPay;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox subTotal;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox taxBox;
+        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox totalTextBox;
     }
 }

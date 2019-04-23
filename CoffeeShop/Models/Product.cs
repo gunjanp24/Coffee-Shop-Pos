@@ -5,7 +5,7 @@
         public int ProductID { get; set; }
         public int ProductType { get; set; }
         public string Description { get; set; }
-        public decimal Price = 0.00M;
+        public double Price;
         public byte[] Image { get; set; }
     }
 }

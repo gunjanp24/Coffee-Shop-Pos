@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace CoffeeShop
 {
@@ -12,6 +13,11 @@ namespace CoffeeShop
             InitializeComponent();
 
             genGraph();
+
+            
+            sqlconnector.GetSalesAndTaxTotals(out double sales, out double tax);
+            salesBox.Text += sales.ToString();
+            taxBox.Text += tax.ToString();
         }
 
         private void genGraph()
@@ -39,7 +45,8 @@ namespace CoffeeShop
             dataChart.Series["Series1"].XValueMember = "Key";
             dataChart.Series["Series1"].YValueMembers = "Value";
             dataChart.Series["Series1"].Name = "Total Sales by Product";
-
+            dataChart.ChartAreas[0].AxisX.Interval = 1;
+            //dataChart.ChartAreas[0].AxisY.Interval = 1;
             dataChart.Show();
 
         }

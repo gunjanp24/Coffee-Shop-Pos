@@ -43,6 +43,7 @@
             this.label1.Size = new System.Drawing.Size(186, 27);
             this.label1.TabIndex = 0;
             this.label1.Text = "Amount to pay";
+            this.label1.UseMnemonic = false;
             // 
             // label2
             // 
@@ -57,12 +58,15 @@
             // 
             this.amountBox.Location = new System.Drawing.Point(266, 46);
             this.amountBox.Name = "amountBox";
+            this.amountBox.ReadOnly = true;
             this.amountBox.Size = new System.Drawing.Size(189, 36);
             this.amountBox.TabIndex = 2;
+            this.amountBox.TabStop = false;
             // 
             // payBox
             // 
             this.payBox.Location = new System.Drawing.Point(269, 122);
+            this.payBox.MaxLength = 10;
             this.payBox.Name = "payBox";
             this.payBox.Size = new System.Drawing.Size(185, 36);
             this.payBox.TabIndex = 3;
@@ -70,6 +74,7 @@
             // payBTN
             // 
             this.payBTN.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
+            this.payBTN.BackColor = System.Drawing.Color.LightSteelBlue;
             this.payBTN.FlatAppearance.BorderSize = 0;
             this.payBTN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.payBTN.Location = new System.Drawing.Point(150, 210);
@@ -77,8 +82,12 @@
             this.payBTN.Size = new System.Drawing.Size(224, 57);
             this.payBTN.TabIndex = 4;
             this.payBTN.Text = "Make payment";
-            this.payBTN.UseVisualStyleBackColor = true;
+            this.payBTN.UseVisualStyleBackColor = false;
             this.payBTN.Click += new System.EventHandler(this.payBTN_Click);
+            this.payBTN.Enter += new System.EventHandler(this.payBTN_Enter);
+            this.payBTN.Leave += new System.EventHandler(this.payBTN_Leave);
+            this.payBTN.MouseEnter += new System.EventHandler(this.payBTN_MouseEnter);
+            this.payBTN.MouseLeave += new System.EventHandler(this.payBTN_MouseLeave);
             // 
             // Payment
             // 

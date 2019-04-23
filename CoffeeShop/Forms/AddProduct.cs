@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using System.Collections.Generic;
 
 namespace CoffeeShop
 {
@@ -13,14 +14,9 @@ namespace CoffeeShop
         public AddProduct()
         {
             InitializeComponent();
+            comboLoad();
+         
 
-            catComboBOX.DataSource = null;
-
-           
-            catComboBOX.DataSource = sqlconnector.productTypes;
-            catComboBOX.DisplayMember = "ProductTypes";
-            catComboBOX.ValueMember = "Description";
-            
         }
 
         private void uploadBTN_Click(object sender, EventArgs e)
@@ -38,19 +34,88 @@ namespace CoffeeShop
             }
         }
 
+        private void comboLoad()
+        {
+            catComboBOX.DataSource = null;
+            Models.ProductType selectcombo = new Models.ProductType();
+            selectcombo.ProductTypeID = -1;
+            selectcombo.Description = "Please select product type";
+            List<Models.ProductType> pt = new List<Models.ProductType>();
+            pt.Add(selectcombo);
+            foreach (Models.ProductType i in sqlconnector.productTypes)
+            {
+                pt.Add(i);
+            }
+
+            catComboBOX.DataSource = pt;
+           // catComboBOX.DisplayMember = "ProductTypes";
+            catComboBOX.ValueMember = "Description";
+
+
+        }
+
         private void saveBTN_Click(object sender, EventArgs e)
         {
             
             Models.Product product = new Models.Product();
-            product.Description = descTextBOX.Text;
-            product.Price = Convert.ToDecimal(priceTextBOX.Text, culture); 
-            product.Image = imageBlob;
-            Models.ProductType type = (Models.ProductType)catComboBOX.SelectedItem;
-            product.ProductType = type.ProductTypeID;
-            sqlconnector.SaveProduct(product);
-            saveBTN.Text = "Product Saved";
-            saveBTN.BackColor = Color.AliceBlue;
+            if (descTextBOX.Text != "" && ((String)(descTextBOX.Text)).Length > 2 && ((String)(descTextBOX.Text)).Length < 31)
+            {
+                product.Description = descTextBOX.Text;
+            }
+            else
+            {
+                MessageBox.Show(" Description Input Invalid \n Must be more than 2 characters \n Must be less than 30 characters");
+                return;
+            }
 
+            try
+            {
+                double x =  Convert.ToDouble(priceTextBOX.Text, culture);
+                if (x > 0.01 && x < 50001)
+                {
+                    product.Price = x;
+                } else { throw new DivideByZeroException(); }
+            }
+            catch
+            {
+                MessageBox.Show(" Price Input Invalid \n Must a positive number \n Sample Format \n ----> 0.25 \n ----> 5 \n ----> 51.25 \n Any number between 0.01 and 50,000");
+                return;
+            }
+
+            if (((Models.ProductType)catComboBOX.SelectedItem).ProductTypeID > 0)
+            {
+                Models.ProductType type = (Models.ProductType)catComboBOX.SelectedItem;
+                product.ProductType = type.ProductTypeID;
+            }
+            else
+            {
+                MessageBox.Show("Product Type Selection Invalid");
+                return;
+            }
+
+            if (imageBlob != null)
+            {
+                product.Image = imageBlob;
+            }
+            else
+            {
+                MessageBox.Show("Image Input Invalid");
+                return;
+            }
+            
+        
+            try
+            {
+                sqlconnector.SaveProduct(product);
+                saveBTN.Text = "Product Saved";
+                saveBTN.BackColor = Color.AliceBlue;
+            }
+            catch
+            {
+                MessageBox.Show("Unable to Save New Product");
+                return;
+
+            }
         }
     }
 }
